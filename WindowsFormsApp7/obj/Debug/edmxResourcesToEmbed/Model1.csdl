@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="demoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Material_type_import">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Byte" Nullable="false" />
+    <Property Name="material_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="material_brake_perc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Partner_products_import">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Byte" Nullable="false" />
+    <Property Name="production_id" Type="Byte" Nullable="false" />
+    <Property Name="partner_id" Type="Byte" Nullable="false" />
+    <Property Name="prod_ammount" Type="Int32" Nullable="false" />
+    <Property Name="sale_date" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="Partners_import" Relationship="Self.FK_Partner_products_import_Partners_import" FromRole="Partner_products_import" ToRole="Partners_import" />
+    <NavigationProperty Name="Products_import" Relationship="Self.FK_Partner_products_import_Products_import" FromRole="Partner_products_import" ToRole="Products_import" />
+  </EntityType>
+  <EntityType Name="Partner_type">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Byte" Nullable="false" />
+    <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Partners_import">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Byte" Nullable="false" />
+    <Property Name="partner_type_id" Type="Byte" Nullable="false" />
+    <Property Name="partner" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="director" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="adress" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="inn" Type="Int64" Nullable="false" />
+    <Property Name="rating" Type="Byte" Nullable="false" />
+    <Property Name="new_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Partner_products_import" Relationship="Self.FK_Partner_products_import_Partners_import" FromRole="Partners_import" ToRole="Partner_products_import" />
+  </EntityType>
+  <EntityType Name="Product_type_import">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Byte" Nullable="false" />
+    <Property Name="prod_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="prode_type_coef" Type="Decimal" Precision="18" Scale="10" Nullable="false" />
+    <NavigationProperty Name="Products_import" Relationship="Self.FK_Products_import_Product_type_import" FromRole="Product_type_import" ToRole="Products_import" />
+  </EntityType>
+  <EntityType Name="Products_import">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Byte" Nullable="false" />
+    <Property Name="prod_type_id" Type="Byte" Nullable="false" />
+    <Property Name="production" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="article" Type="Int32" Nullable="false" />
+    <Property Name="min_price_for_partner" Type="Decimal" Precision="18" Scale="10" Nullable="false" />
+    <NavigationProperty Name="Partner_products_import" Relationship="Self.FK_Partner_products_import_Products_import" FromRole="Products_import" ToRole="Partner_products_import" />
+    <NavigationProperty Name="Product_type_import" Relationship="Self.FK_Products_import_Product_type_import" FromRole="Products_import" ToRole="Product_type_import" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Partner_products_import_Partners_import">
+    <End Role="Partners_import" Type="Self.Partners_import" Multiplicity="1" />
+    <End Role="Partner_products_import" Type="Self.Partner_products_import" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Partners_import">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Partner_products_import">
+        <PropertyRef Name="partner_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Partner_products_import_Products_import">
+    <End Role="Products_import" Type="Self.Products_import" Multiplicity="1" />
+    <End Role="Partner_products_import" Type="Self.Partner_products_import" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products_import">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Partner_products_import">
+        <PropertyRef Name="production_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Products_import_Product_type_import">
+    <End Role="Product_type_import" Type="Self.Product_type_import" Multiplicity="1" />
+    <End Role="Products_import" Type="Self.Products_import" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product_type_import">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Products_import">
+        <PropertyRef Name="prod_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="demoEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Material_type_import" EntityType="Self.Material_type_import" />
+    <EntitySet Name="Partner_products_import" EntityType="Self.Partner_products_import" />
+    <EntitySet Name="Partner_type" EntityType="Self.Partner_type" />
+    <EntitySet Name="Partners_import" EntityType="Self.Partners_import" />
+    <EntitySet Name="Product_type_import" EntityType="Self.Product_type_import" />
+    <EntitySet Name="Products_import" EntityType="Self.Products_import" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK_Partner_products_import_Partners_import" Association="Self.FK_Partner_products_import_Partners_import">
+      <End Role="Partners_import" EntitySet="Partners_import" />
+      <End Role="Partner_products_import" EntitySet="Partner_products_import" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Partner_products_import_Products_import" Association="Self.FK_Partner_products_import_Products_import">
+      <End Role="Products_import" EntitySet="Products_import" />
+      <End Role="Partner_products_import" EntitySet="Partner_products_import" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Products_import_Product_type_import" Association="Self.FK_Products_import_Product_type_import">
+      <End Role="Product_type_import" EntitySet="Product_type_import" />
+      <End Role="Products_import" EntitySet="Products_import" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
